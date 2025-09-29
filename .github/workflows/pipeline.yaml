@@ -2,39 +2,39 @@ name: Todo App CI/CD Pipeline
 
 on:
   push:
-  branches: [ main ]
+    branches: [ main ]
 
 jobs:
   build:
-  name: Build Phase
-  runs-on: ubuntu-latest
+    name: Build Phase
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name:  Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
+      - name:  Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
 
-    - name: Install Dependencies
-      run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Build Application
-      run: npm run build
+      - name: Build application
+        run: npm run build
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-          name: build-files
-          path: dist
-          retention-days: 1
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+            name: build-files
+            path: dist/
+            retention-days: 1
 
   test:
-  name: Test Phase
-  runs-on: ubuntu-latest
+    name: Test Phase
+    runs-on: ubuntu-latest
 
   steps:
     - name: Checkout Code
