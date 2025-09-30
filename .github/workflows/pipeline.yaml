@@ -52,3 +52,46 @@ jobs:
 
       - name: Run Tests
         run: npm run test
+
+  deploy:
+    name: Deploy Phase
+    runs-on: ubuntu-latest
+    needs: [build, test]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-files
+          path: dist/
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Prepare Google Application Credentials
+        run:
+          echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}} | base64 -decode > $HOME/private-key.json
+
+
+      - name: Deploy to Firebase
+        run: |
+          export GOOGLE_APPLICATION_CREDENTIALS=$HOME/private-key.json
+          firebase experiments:enable webflameworks
+          firebase deploy --only hosting
+
+      - name: Remove private key
+        if: always()
+        run: rm $HOME/private-key.json
+
+
+
+
