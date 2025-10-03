@@ -85,7 +85,7 @@ jobs:
       - name: Deploy to Firebase
         run: |
           export GOOGLE_APPLICATION_CREDENTIALS=$HOME/private-key.json
-          firebase experiments:enable webflameworks
+          firebase experiments:enable webframeworks
           firebase deploy --only hosting
 
       - name: Remove private key
